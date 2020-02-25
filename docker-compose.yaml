@@ -1,0 +1,21 @@
+version: '3.7'
+
+services:
+  backend:
+    build: ./api
+    container_name: trade_backend
+    working_dir: /app/api
+    command: ["/bin/sh", "django_setup.sh"]
+    ports:
+      - "8001:8000"
+    volumes:
+      - ./api:/app/api
+  db:
+    image: "mysql:5.7"
+    container_name: trade_mysql
+    ports:
+        - "3307:3306"
+    volumes:
+      - ./data:/var/lib/mysql
+    env_file:
+      - .db_env

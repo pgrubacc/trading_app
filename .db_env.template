@@ -1,0 +1,3 @@
+# Docker compose expects a .db_env file. Example conf below:
+MYSQL_ROOT_PASSWORD=your_pass
+MYSQL_DATABASE=your_db
