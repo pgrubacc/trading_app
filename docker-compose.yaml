@@ -4,12 +4,12 @@ services:
   backend:
     build: ./api
     container_name: trade_backend
-    working_dir: /app/api
+    working_dir: /app
     command: ["/bin/sh", "django_setup.sh"]
     ports:
       - "8001:8000"
     volumes:
-      - ./api:/app/api
+      - ./api:/app/
     depends_on:
       - db
   db:
