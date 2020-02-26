@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 
 import environ
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False)
@@ -30,7 +31,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '17g^(zss5*o3fp7b%h%+@pmkakd@**f@cztc)#(67l$c#f(%-f'
+SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = []
 
