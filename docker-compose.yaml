@@ -21,3 +21,18 @@ services:
       - ./data:/var/lib/mysql
     env_file:
       - .db_env
+  client:
+    build: ./client
+    command: ["npm", "start"]
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./client:/app/
+      - node-modules:/app/node_modules
+    env_file:
+      - .client_env
+    depends_on:
+      - backend
+
+volumes:
+  node-modules:
