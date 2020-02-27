@@ -32,7 +32,7 @@ class Trade(models.Model):
 
 class Currency(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(max_length=12)
+    name = models.CharField(max_length=12, unique=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -41,4 +41,3 @@ class Currency(models.Model):
         db_table = "currencies"
         verbose_name = "currency"
         verbose_name_plural = "currencies"
-        unique_together = ['id', 'name']

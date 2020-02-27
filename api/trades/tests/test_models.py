@@ -10,7 +10,7 @@ class TradeModelTest(TestCase):
     def setUpTestData(cls):
         cls.unique_id = 'TR1234567'
         cls.sell_currency = Currency.objects.create(name='USD')
-        cls.buy_currency = Currency.objects.create(name='USD')
+        cls.buy_currency = Currency.objects.create(name='EUR')
         Trade.objects.create(string_id=cls.unique_id, sell_currency=cls.sell_currency,
                              sell_amount=10, buy_currency=cls.buy_currency, buy_amount=15, rate=1.5)
 

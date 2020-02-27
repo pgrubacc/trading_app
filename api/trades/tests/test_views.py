@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
 from rest_framework.test import APIClient
 
 from trades.models import Trade, Currency
@@ -42,14 +42,22 @@ class TradeModelTest(TestCase):
         self.assertEqual(res.data[-1]['string_id'], self.oldest_trade.string_id)
 
     def test_create_trade(self):
-        res = self.client.post(reverse('trades'), data={'sell_currency': self.currency_1.id,
+        res = self.client.post(reverse('trades'), data={'sell_currency': self.currency_1.name,
                                                         'sell_amount': 5,
-                                                        'buy_currency': self.currency_2.id,
+                                                        'buy_currency': self.currency_2.name,
                                                         'buy_amount': 7.5,
                                                         'rate': 1.5})
         self.assertEqual(res.status_code, HTTP_201_CREATED)
         string_id = res.data['string_id']
         self.assertTrue(Trade.objects.filter(string_id=string_id).exists())
+
+    def test_create_invalid_trade(self):
+        res = self.client.post(reverse('trades'), data={'sell_currency': self.currency_1.name,
+                                                        'sell_amount': 5,
+                                                        'buy_currency': self.currency_1.name,
+                                                        'buy_amount': 7.5,
+                                                        'rate': 1.5})
+        self.assertEqual(res.status_code, HTTP_400_BAD_REQUEST)
 
     def test_get_currencies(self):
         res = self.client.get(reverse('currencies'))
