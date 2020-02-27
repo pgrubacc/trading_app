@@ -23,6 +23,7 @@ services:
       - .db_env
   client:
     build: ./client
+    container_name: trade_client
     command: ["npm", "start"]
     ports:
       - "3000:3000"
