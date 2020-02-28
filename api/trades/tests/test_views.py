@@ -1,14 +1,20 @@
 from datetime import datetime, timedelta
+from unittest.mock import patch
 
+import requests
+import responses
+from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, \
+    HTTP_503_SERVICE_UNAVAILABLE
+from rest_framework.test import APIClient
+
+from django.conf import settings
 from django.test import TestCase
 from django.urls import reverse
-from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST
-from rest_framework.test import APIClient
 
 from trades.models import Trade, Currency
 
 
-class TradeModelTest(TestCase):
+class TradeViewsTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
@@ -64,3 +70,43 @@ class TradeModelTest(TestCase):
         self.assertEqual(res.status_code, HTTP_200_OK)
         self.assertEqual(len(res.data), Currency.objects.count())
         self.assertEqual(res.data[0]['id'], self.currency_1.id)
+
+
+class ExchangeViewsTest(TestCase):
+
+    @classmethod
+    def setUpTestData(cls):
+        cls.client = APIClient()
+        cls.currency_1 = Currency.objects.create(name='EUR')
+        cls.currency_2 = Currency.objects.create(name='USD')
+        cls.exchange_url = f'{settings.EXCHANGE_API_ROOT}/latest'
+
+    @responses.activate
+    def test_exchange_rate(self):
+        eur_usd_rate = 1.11117
+        responses.add(responses.GET, self.exchange_url,
+                      json={'success': True, 'rates': {'USD': eur_usd_rate}})
+        res = self.client.get(reverse('exchange-rate'), data={'sell': self.currency_1.name,
+                                                              'buy': self.currency_2.name})
+        self.assertEqual(res.status_code, HTTP_200_OK)
+        self.assertEqual(res.data.get('rate'), round(eur_usd_rate, 4))
+
+    @responses.activate
+    def test_exchange_rate_unsuccessful_req(self):
+        responses.add(responses.GET, self.exchange_url,
+                      json={'success': False})
+        res = self.client.get(reverse('exchange-rate'), data={'sell': self.currency_1.name,
+                                                              'buy': self.currency_2.name})
+        self.assertEqual(res.status_code, HTTP_503_SERVICE_UNAVAILABLE)
+        res_error = res.data.get('detail')
+        expected_err_msg = 'The exchange api request was unsuccessful.'
+        self.assertEqual(res_error, expected_err_msg)
+
+    def test_exchange_rate_network_err(self):
+        with patch('requests.get', side_effect=requests.exceptions.RequestException):
+            res = self.client.get(reverse('exchange-rate'), data={'sell': self.currency_1.name,
+                                                                  'buy': self.currency_2.name})
+        self.assertEqual(res.status_code, HTTP_503_SERVICE_UNAVAILABLE)
+        res_error = res.data.get('detail')
+        expected_err_msg = 'Could not contact the exchange API.'
+        self.assertEqual(res_error, expected_err_msg)
