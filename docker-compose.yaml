@@ -12,6 +12,8 @@ services:
       - ./api:/app/
     depends_on:
       - db
+    environment:
+      - DJANGO_SETTINGS_MODULE=api.settings.development
   db:
     image: "mysql:5.7"
     container_name: trade_mysql

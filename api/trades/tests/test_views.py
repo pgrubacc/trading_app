@@ -69,7 +69,7 @@ class TradeViewsTest(TestCase):
         res = self.client.get(reverse('currencies'))
         self.assertEqual(res.status_code, HTTP_200_OK)
         self.assertEqual(len(res.data), Currency.objects.count())
-        self.assertEqual(res.data[0]['id'], self.currency_1.id)
+        self.assertEqual(res.data[0]['name'], self.currency_1.name)
 
 
 class ExchangeViewsTest(TestCase):

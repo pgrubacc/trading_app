@@ -22,7 +22,8 @@ class TradeSerializer(serializers.ModelSerializer):
             raise ValidationError('Sell and buy currency values cannot be identical.')
         return data
 
+
 class CurrencySerializer(serializers.ModelSerializer):
     class Meta:
         model = Currency
-        fields = ('id', 'name',)
+        fields = ('name',)
