@@ -3,7 +3,6 @@ from unittest.mock import patch
 
 import requests
 import responses
-from rest_framework.exceptions import ValidationError
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, \
     HTTP_503_SERVICE_UNAVAILABLE
 from rest_framework.test import APIClient
