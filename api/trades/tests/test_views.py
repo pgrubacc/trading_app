@@ -3,6 +3,7 @@ from unittest.mock import patch
 
 import requests
 import responses
+from rest_framework.exceptions import ValidationError
 from rest_framework.status import HTTP_200_OK, HTTP_201_CREATED, HTTP_400_BAD_REQUEST, \
     HTTP_503_SERVICE_UNAVAILABLE
 from rest_framework.test import APIClient
@@ -90,6 +91,15 @@ class ExchangeViewsTest(TestCase):
                                                               'buy': self.currency_2.name})
         self.assertEqual(res.status_code, HTTP_200_OK)
         self.assertEqual(res.data.get('rate'), round(eur_usd_rate, 4))
+
+    def test_exchange_rate_missing_param(self):
+        res = self.client.get(reverse('exchange-rate'), data={'sell': self.currency_1.name})
+        self.assertEqual(res.status_code, HTTP_400_BAD_REQUEST)
+
+    def test_exchange_rate_invalid_param(self):
+        res = self.client.get(reverse('exchange-rate'), data={'sell': self.currency_1.name,
+                                                              'buy_wrong': self.currency_2.name})
+        self.assertEqual(res.status_code, HTTP_400_BAD_REQUEST)
 
     @responses.activate
     def test_exchange_rate_unsuccessful_req(self):
