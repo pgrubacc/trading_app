@@ -62,10 +62,12 @@ class App extends React.Component {
     }
 
     limitDecimalPlaces(e, count) {
-      if (e.target.value.indexOf('.') === -1) { return; }
-      if ((e.target.value.length - e.target.value.indexOf('.')) > count) {
-        e.target.value = parseFloat(e.target.value).toFixed(count);
-      }
+        if (e.target.value.indexOf('.') === -1) {
+            return;
+        }
+        if ((e.target.value.length - e.target.value.indexOf('.')) > count) {
+            e.target.value = parseFloat(e.target.value).toFixed(count);
+        }
     }
 
     setCurrentSellCurrency(event) {
@@ -208,7 +210,8 @@ class App extends React.Component {
                                 {this.generateCurrencyOptions(buyOptions)}
                             </select>
                             <label htmlFor="name">Buy Amount</label><br/>
-                            <input id="buy-input" type="number" step=".01" name="buy" disabled="disabled"
+                            <input id="buy-input" type="number" step=".01" name="buy"
+                                   disabled="disabled"
                                    value={(this.state.rate * this.state.sellAmount).toFixed(2)}
                                    readOnly/>
 
