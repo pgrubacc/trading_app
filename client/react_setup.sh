@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Waiting for backend..."
 while ! nc -z backend 8000; do sleep 1; done;

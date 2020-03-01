@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 echo "Waiting for db..."
 while ! nc -z db 3306; do sleep 1; done;
