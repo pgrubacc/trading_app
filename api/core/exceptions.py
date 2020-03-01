@@ -1,3 +1,7 @@
+"""
+Generic exceptions used by any app.
+"""
+
 from rest_framework.exceptions import APIException
 
 

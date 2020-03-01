@@ -1,6 +1,6 @@
 from django.core.management import BaseCommand
 
-from trades.exceptions import ServiceUnavailable
+from core.exceptions import ServiceUnavailable
 from trades.utils import populate_db_currencies_from_exchange_api
 
 
