@@ -12,7 +12,7 @@ It uses a third party API (https://fixer.io/) to get the list of supported curre
 to get conversion rates for different currencies. The backend uses the API on startup 
 to acquire a list of supported currencies.
 
-Note: The free plan of the API only provides the ability to get exchange rates for EUR as the
+**Note**: The free plan of the API only provides the ability to get exchange rates for EUR as the
 base currency. The backend will return a 503 error in this case and this is not handled on the 
 frontend yet.
 
@@ -23,9 +23,6 @@ Prerequisites: a docker-compose that supports version 3.7 has to be present on y
 The project depends on 3 .env files which are not checked in the repo. You can see how they're 
 supposed to look by checking the .template files. To start without much hassle, you can simply 
 take the template files and copy them into files without the template extension:
-
-
-.. code::
 
     cp .db_env.template .db_env
     cp api/api/settings/.env.template api/api/settings/.env
