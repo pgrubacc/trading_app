@@ -15,25 +15,29 @@ class QueryParamsUtilsTest(TestCase):
     @classmethod
     def setUpTestData(cls):
         cls.request = Mock()
+        cls.sell_param = 'sell'
+        cls.sell_currency = Currency.objects.create(name='EUR')
         Mock.query_params = {
-            'sell': 'EUR',
+            cls.sell_param: cls.sell_currency.name,
             'buy': 'Trash'
         }
-        cls.sell_currency = Currency.objects.create(name='EUR')
 
     def test_get_mandatory_query_param(self):
-        sell_val = get_mandatory_query_param(self.request, 'sell')
-        self.assertEqual(sell_val, Mock.query_params.get('sell'))
+        sell_val = get_mandatory_query_param(self.request, self.sell_param)
+        self.assertEqual(sell_val, Mock.query_params.get(self.sell_param))
 
     def test_get_mandatory_query_param_invalid(self):
-        self.assertRaises(ValidationError, get_mandatory_query_param, self.request, 'nonexistent')
+        invalid_param = 'nonexistent'
+        with self.assertRaisesMessage(ValidationError, f'Query param {invalid_param} is required.'):
+            get_mandatory_query_param(self.request, invalid_param)
 
     def test_get_currency_query_param(self):
-        sell_currency = get_currency_query_param(self.request, 'sell')
+        sell_currency = get_currency_query_param(self.request, self.sell_param)
         self.assertEqual(self.sell_currency.name, sell_currency)
 
     def test_get_invalid_currency_query_param(self):
-        self.assertRaises(ValidationError, get_currency_query_param, self.request, 'buy')
+        with self.assertRaisesMessage(ValidationError, 'Invalid buy currency query param.'):
+            get_currency_query_param(self.request, 'buy')
 
 
 class ExchangeSupportedCurrenciesUtilsTest(TestCase):
