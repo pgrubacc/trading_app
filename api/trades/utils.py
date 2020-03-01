@@ -26,10 +26,10 @@ def get_currency_query_param(request, currency):
         it's not found among Currency objects (lookup by name).
 
     """
-    sell_currency = get_mandatory_query_param(request, currency)
-    if not Currency.objects.filter(name=sell_currency).exists():
+    currency_value = get_mandatory_query_param(request, currency)
+    if not Currency.objects.filter(name=currency_value).exists():
         raise ValidationError(f'Invalid {currency} currency query param.')
-    return sell_currency
+    return currency_value
 
 
 def get_mandatory_query_param(request, param):
