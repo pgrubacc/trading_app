@@ -1,4 +1,4 @@
-# trading_app
+# Trading app
 Simple Django/React app used to perform and display trades in different currencies.
 
 It's deployed as three separate containers - one for the backend (Django),
