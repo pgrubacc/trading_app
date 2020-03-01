@@ -42,14 +42,29 @@ You should be able to check the frontend page at localhost:8001.
 
 If you want to check the backend API docs, you can visit localhost:8002/api/
 
+To run the backend tests, execute the following command inside the backend container:
+.. code::
+
+    python manage.py test
+
+To refresh the database with new currencies from the exchange API, the following command is 
+provided:
+.. code::
+
+    python manage.py populate_db_currencies
+
+It is ran during Django the container startup.
+
 Things to improve:
 ------------------------------
 Frontend:
  - Split the frontend project into more components and add validation for all API calls
  - Handle the following case: user prepares to make a transaction and then waits for some 
  time. An additional check should be made to see if the rate changed and warn the user
+ - Add tests
 
 Backend:
  - Handle the case if the third party API removes support for some currencies. Right now, 
  there's no check if any of the currencies are gone during the populate currencies startup step
+ - Improve logging for manage.py populate_db_currencies
  - Implement a caching option in case we want to save exchange API bandwidth
