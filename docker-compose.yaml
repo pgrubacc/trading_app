@@ -7,7 +7,7 @@ services:
     working_dir: /app
     command: ["/bin/sh", "django_setup.sh"]
     ports:
-      - "8001:8000"
+      - "8002:8000"
     volumes:
       - ./api:/app/
     depends_on:
@@ -28,7 +28,7 @@ services:
     container_name: trade_client
     command: ["npm", "start"]
     ports:
-      - "3000:3000"
+      - "8001:3000"
     volumes:
       - ./client:/app/
       - node-modules:/app/node_modules
